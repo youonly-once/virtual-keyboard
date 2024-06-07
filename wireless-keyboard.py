@@ -75,7 +75,19 @@ def draw_keyboard(img, buttonList):
 
 caps = False
 
-
+def draw_result(img, text_finished, text_count):
+    # 敲击内容写到屏幕
+    line_count = 61
+    line_width = 1250
+    lines = text_count // line_count
+    line_height = 450 + lines * 25
+    line_pos = (20, 400)
+    # 画一个矩形
+    cv2.rectangle(img, line_pos, (line_width, line_height), (0, 0, 0), cv2.FILLED)
+    for i in range(lines + 1):
+        # 指定位置写入敲击内容
+        cv2.putText(img, text_finished[line_count * i:line_count * (i + 1)], (20, 425 + 25 * i), cv2.FONT_HERSHEY_PLAIN,
+                    2, (255, 255, 255), thickness=2)
 # 检测是否正在输入
 def type_checker(raw_img, gray, img, text_finished, text_count, last_type_time, hand, detector):
     # 重新获取列表
@@ -149,18 +161,8 @@ def type_checker(raw_img, gray, img, text_finished, text_count, last_type_time, 
                     else:
                         text_finished += button.label
                         text_count += 1
-    #敲击内容写到屏幕
-    line_count = 61
-    line_width = 1250
-    lines = text_count // line_count
-    line_height = 450 + lines * 25
-    line_pos = (20, 400)
-    #画一个矩形
-    cv2.rectangle(img, line_pos, (line_width, line_height), (0, 0, 0), cv2.FILLED)
-    for i in range(lines + 1):
-        #指定位置写入敲击内容
-        cv2.putText(img, text_finished[line_count * i:line_count * (i + 1)], (20, 425 + 25 * i), cv2.FONT_HERSHEY_PLAIN,
-                    2, (255, 255, 255), thickness=2)
+
+    draw_result(img, text_finished, text_count)
     return img, text_finished, text_count, last_type_time
 
 
